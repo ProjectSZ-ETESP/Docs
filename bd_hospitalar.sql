@@ -41,7 +41,7 @@ go
 go
 CREATE TABLE tblTipoFunc (
 idTipoFunc int PRIMARY KEY,
-descricaoTipoFunc varchar(256) NOT NULL
+descricaoTipoFunc varchar(50) NOT NULL
 )
 go
 CREATE INDEX xTipoFunc ON tblTipoFunc (idTipoFunc)
@@ -94,7 +94,9 @@ cnpj char(14),
 crm char(6),
 cpfPaciente char(11),
 dataConsulta date NOT NULL,
-horacConsulta time NOT NULL,
+horaConsulta time NOT NULL,
+preConsulta varchar(256),
+prioridade char(1) NOT NULL, 
 
 CONSTRAINT FK_cnpjConsulta FOREIGN KEY (cnpj)
 	REFERENCES tblHospital (cnpj),
@@ -108,7 +110,7 @@ CREATE INDEX xConsulta ON tblConsulta (idConsulta, cnpj, crm, cpfPaciente)
 go
 
 go
-CREATE TABLE tblProntuario ( -- faltam mais coisas
+CREATE TABLE tblProntuario (
 idProntuario int PRIMARY KEY IDENTITY,
 cpfPaciente char(11),
 idConsulta int,
@@ -173,4 +175,23 @@ CONSTRAINT FK_idForumResp FOREIGN KEY (idForum)
 )
 go
 CREATE INDEX xResposta ON tblResposta (idResposta, idPostagem, cpfFunc, idForum)
+go
+
+go
+CREATE TABLE tblModeracao (
+idMod int PRIMARY KEY IDENTITY,
+cpfPaciente char(11),
+cpfFunc char(11),
+dataBan date NOT NULL,
+horaBan time NOT NULL,
+duracao int NOT NULL,
+causa varchar(256),
+
+CONSTRAINT FK_cpfPacienteMod FOREIGN KEY (cpfPaciente)
+	REFERENCES tblPaciente (cpfPaciente),
+CONSTRAINT FK_cpfFuncMod FOREIGN KEY (cpfFunc)
+	REFERENCES tblFuncionario (cpfFunc)
+)
+go
+CREATE INDEX xModeracao ON tblModeracao (idMod, cpfPaciente, cpfFunc)
 go
