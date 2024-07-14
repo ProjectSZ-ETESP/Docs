@@ -9,18 +9,13 @@ USE sistemaHospitalar
 go
 
 go
-CREATE TABLE tblPaciente (
-cpfPaciente char(11) PRIMARY KEY,
-nomePaciente varchar(100) NOT NULL,
-emailPaciente varchar(256) NOT NULL,
-sexoPaciente char(1) NOT NULL,
-dataNascPaciente date NOT NULL,
-fonePaciente char(11),
-fotoPaciente varbinary(max),
-senhaPaciente varchar(50) NOT NULL
+CREATE TABLE tblUsuario (
+idUsuario int PRIMARY KEY IDENTITY(1,1),
+email varchar(100) NOT NULL,
+senha varchar(50) NOT NULL
 )
 go
-CREATE INDEX xPaciente ON tblPaciente (cpfPaciente)
+CREATE INDEX xUsuario ON tblUsuario (idUsuario)
 go
 
 go
@@ -39,34 +34,39 @@ CREATE INDEX xHospital ON tblHospital (cnpj)
 go
 
 go
-CREATE TABLE tblTipoFunc (
-idTipoFunc int PRIMARY KEY,
-descricaoTipoFunc varchar(50) NOT NULL
+CREATE TABLE tblPaciente (
+cpfPaciente char(11) PRIMARY KEY,
+idUsuario int,
+nomePaciente varchar(100) NOT NULL,
+sexoPaciente char(1) NOT NULL,
+dataNascPaciente date NOT NULL,
+fonePaciente char(11),
+fotoPaciente varbinary(max),
+
+CONSTRAINT fk_PacienteUsuario FOREIGN KEY (idUsuario)
+	REFERENCES tblUsuario (idUsuario)
 )
 go
-CREATE INDEX xTipoFunc ON tblTipoFunc (idTipoFunc)
+CREATE INDEX xPaciente ON tblPaciente (cpfPaciente, idUsuario)
 go
 
 go
 CREATE TABLE tblFuncionario (
-cpfFunc char(11) PRIMARY KEY,
+cpfFuncionario char(11) PRIMARY KEY,
+idUsuario int,
 cnpj char(14),
-idTipoFunc int,
-nomeFunc varchar(100) NOT NULL,
-emailFunc varchar(256) NOT NULL,
-sexoFunc char(1) NOT NULL,
-dataNascFunc date NOT NULL,
-foneFunc char(11),
-fotoFunc varbinary(max),
-senhaFunc varchar(50) NOT NULL,
+nomeFuncionario varchar(100) NOT NULL,
+sexoFuncionario char(1) NOT NULL,
+foneFuncionario char(11),
+fotoFuncionario varbinary(max),
 
-CONSTRAINT FK_cnpjFunc FOREIGN KEY (cnpj)
-	REFERENCES tblHospital (cnpj),
-CONSTRAINT FK_idTipoFunc FOREIGN KEY (idTipoFunc)
-	REFERENCES tblTipoFunc (idTipoFunc)
+CONSTRAINT fkFuncionarioUsuario FOREIGN KEY (idUsuario)
+	REFERENCES tblUsuario (idUsuario),
+CONSTRAINT fkFuncionarioHospital FOREIGN KEY (cnpj)
+	REFERENCES tblHospital (cnpj)
 )
 go
-CREATE INDEX xFuncionario ON tblFuncionario (cpfFunc, cnpj)
+CREATE INDEX xFuncionario ON tblFuncionario (cpfFuncionario, idUsuario, cnpj)
 go
 
 go
@@ -95,8 +95,7 @@ crm char(6),
 cpfPaciente char(11),
 dataConsulta date NOT NULL,
 horaConsulta time NOT NULL,
-preConsulta varchar(256),
-prioridade char(1) NOT NULL, 
+preConsulta varchar(256) -- considerar se mantém ou não
 
 CONSTRAINT FK_cnpjConsulta FOREIGN KEY (cnpj)
 	REFERENCES tblHospital (cnpj),
@@ -112,86 +111,24 @@ go
 go
 CREATE TABLE tblProntuario (
 idProntuario int PRIMARY KEY IDENTITY,
-cpfPaciente char(11),
 idConsulta int,
+descricao varchar(256) NOT NULL,
 receituario varchar(256),
 atestado varchar(256),
-descricao varchar(256) NOT NULL,
 
-CONSTRAINT FK_cpfPacientePront FOREIGN KEY (cpfPaciente)
-	REFERENCES tblPaciente (cpfPaciente),
 CONSTRAINT FK_consulta FOREIGN KEY (idConsulta)
 	REFERENCES tblConsulta (idConsulta)
 )
 go
-CREATE INDEX xProntuario ON tblProntuario (idProntuario, cpfPaciente, idConsulta)
+CREATE INDEX xProntuario ON tblProntuario (idProntuario, idConsulta)
 go
 
 go
-CREATE TABLE tblForum (
-idForum int PRIMARY KEY IDENTITY,
-nomeForum varchar(100) NOT NULL,
-descricaoForum varchar(256) NOT NULL,
-dataCria date NOT NULL
+CREATE TABLE tblDisponibilidade (
+idDisponibilidade int PRIMARY KEY IDENTITY,
+dataIndisponivel date,
+descricao varchar(256) NOT NULL
 )
 go
-CREATE INDEX xForum ON tblForum (idForum)
-go
-
-go
-CREATE TABLE tblPostagem (
-idPostagem int PRIMARY KEY IDENTITY,
-cpfPaciente char(11),
-idForum int,
-mensagem varchar(256) NOT NULL,
-dataPostagem date NOT NULL,
-horaPostagem time NOT NULL,
-
-CONSTRAINT FK_cpfPacientePost FOREIGN KEY (cpfPaciente)
-	REFERENCES tblPaciente (cpfPaciente),
-CONSTRAINT FK_idForumPost FOREIGN KEY (idForum)
-	REFERENCES tblForum (idForum)
-)
-go
-CREATE INDEX xPostagem ON tblPostagem (idPostagem, cpfPaciente, idForum)
-go
-
-go
-CREATE TABLE tblResposta (
-idResposta int PRIMARY KEY IDENTITY,
-idPostagem int,
-idForum int,
-cpfFunc char(11),
-mensagem varchar(256) NOT NULL,
-dataResposta date NOT NULL,
-horaResposta time NOT NULL,
-
-CONSTRAINT FK_postagem FOREIGN KEY (idPostagem)
-	REFERENCES tblPostagem (idPostagem),
-CONSTRAINT FK_cpfFuncionario FOREIGN KEY (cpfFunc)
-	REFERENCES tblFuncionario (cpfFunc),
-CONSTRAINT FK_idForumResp FOREIGN KEY (idForum)
-	REFERENCES tblForum (idForum)
-)
-go
-CREATE INDEX xResposta ON tblResposta (idResposta, idPostagem, cpfFunc, idForum)
-go
-
-go
-CREATE TABLE tblModeracao (
-idMod int PRIMARY KEY IDENTITY,
-cpfPaciente char(11),
-cpfFunc char(11),
-dataBan date NOT NULL,
-horaBan time NOT NULL,
-duracao int NOT NULL,
-causa varchar(256),
-
-CONSTRAINT FK_cpfPacienteMod FOREIGN KEY (cpfPaciente)
-	REFERENCES tblPaciente (cpfPaciente),
-CONSTRAINT FK_cpfFuncMod FOREIGN KEY (cpfFunc)
-	REFERENCES tblFuncionario (cpfFunc)
-)
-go
-CREATE INDEX xModeracao ON tblModeracao (idMod, cpfPaciente, cpfFunc)
+CREATE INDEX xDisponibilidade ON tblDisponibilidade (idDisponibilidade)
 go
