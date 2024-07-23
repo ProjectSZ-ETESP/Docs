@@ -22,7 +22,7 @@ go
 CREATE TABLE tblHospital (
 cnpj char(14) PRIMARY KEY,
 nomeHosp varchar(100) NOT NULL,
-diretor varchar(100) NOT NULL,
+direcao varchar(100) NOT NULL,
 descricaoHosp varchar(256) NOT NULL,
 emailHosp varchar(256) NOT NULL,
 endereco varchar(256) NOT NULL,
@@ -35,8 +35,9 @@ go
 
 go
 CREATE TABLE tblPaciente (
-cpfPaciente char(11) PRIMARY KEY,
+idPaciente int PRIMARY KEY IDENTITY(1,1),
 idUsuario int,
+cpfPaciente char(11) NOT NULL,
 nomePaciente varchar(100) NOT NULL,
 sexoPaciente char(1) NOT NULL,
 dataNascPaciente date NOT NULL,
@@ -47,7 +48,7 @@ CONSTRAINT fk_PacienteUsuario FOREIGN KEY (idUsuario)
 	REFERENCES tblUsuario (idUsuario)
 )
 go
-CREATE INDEX xPaciente ON tblPaciente (cpfPaciente, idUsuario)
+CREATE INDEX xPaciente ON tblPaciente (idPaciente, idUsuario)
 go
 
 go
@@ -92,7 +93,7 @@ CREATE TABLE tblConsulta (
 idConsulta int PRIMARY KEY IDENTITY,
 cnpj char(14),
 crm char(6),
-cpfPaciente char(11),
+idPaciente int,
 dataConsulta date NOT NULL,
 horaConsulta time NOT NULL,
 preConsulta varchar(256) -- considerar se mantém ou não
@@ -101,11 +102,11 @@ CONSTRAINT FK_cnpjConsulta FOREIGN KEY (cnpj)
 	REFERENCES tblHospital (cnpj),
 CONSTRAINT FK_crm FOREIGN KEY (crm)
 	REFERENCES tblMedico (crm),
-CONSTRAINT FK_cpfPacienteCons FOREIGN KEY (cpfPaciente)
-	REFERENCES tblPaciente (cpfPaciente)
+CONSTRAINT FK_idPacienteCons FOREIGN KEY (idPaciente)
+	REFERENCES tblPaciente (idPaciente)
 )
 go
-CREATE INDEX xConsulta ON tblConsulta (idConsulta, cnpj, crm, cpfPaciente)
+CREATE INDEX xConsulta ON tblConsulta (idConsulta, cnpj, crm, idPaciente)
 go
 
 go
@@ -114,7 +115,6 @@ idProntuario int PRIMARY KEY IDENTITY,
 idConsulta int,
 descricao varchar(256) NOT NULL,
 receituario varchar(256),
-atestado varchar(256),
 
 CONSTRAINT FK_consulta FOREIGN KEY (idConsulta)
 	REFERENCES tblConsulta (idConsulta)
@@ -126,9 +126,13 @@ go
 go
 CREATE TABLE tblDisponibilidade (
 idDisponibilidade int PRIMARY KEY IDENTITY,
+cnpj char(14),
 dataIndisponivel date,
-descricao varchar(256) NOT NULL
+descricao varchar(256) NOT NULL,
+
+CONSTRAINT FK_disponHospital FOREIGN KEY (cnpj)
+	REFERENCES tblHospital (cnpj)
 )
 go
-CREATE INDEX xDisponibilidade ON tblDisponibilidade (idDisponibilidade)
+CREATE INDEX xDisponibilidade ON tblDisponibilidade (idDisponibilidade, cnpj)
 go
