@@ -4,8 +4,6 @@ WEB:
 
 - Acesso ao histórico de consultas
 
-- Mapa de hospitais
-
 - Switch de cores
 
 - Perguntas frequentes
