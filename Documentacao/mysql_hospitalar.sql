@@ -1,5 +1,3 @@
-CREATE DATABASE bd_hospitalar;
-USE bd_hospitalar;
 
 CREATE TABLE tblUsuario (
 idUsuario int PRIMARY KEY AUTO_INCREMENT,
@@ -28,7 +26,7 @@ nomePaciente varchar(50) NOT NULL,
 sexoPaciente char(1) NOT NULL,
 dataNascPaciente date NOT NULL,
 fonePaciente char(11),
-fotoPaciente varbinary(65535),
+fotoPaciente varbinary(8000),
 
 CONSTRAINT fk_PacienteUsuario FOREIGN KEY (idUsuario)
 	REFERENCES tblUsuario (idUsuario)
@@ -42,7 +40,7 @@ cnpj char(14),
 nomeFuncionario varchar(50) NOT NULL,
 sexoFuncionario char(1) NOT NULL,
 foneFuncionario char(11),
-fotoFuncionario varbinary(65535),
+fotoFuncionario varbinary(8000),
 
 CONSTRAINT fk_FuncionarioUsuario FOREIGN KEY (idUsuario)
 	REFERENCES tblUsuario (idUsuario),
@@ -105,3 +103,74 @@ CONSTRAINT fk_HospitalDisponibilidade FOREIGN KEY (cnpj)
 	REFERENCES tblHospital (cnpj)
 );
 CREATE INDEX xDisponibilidade ON tblDisponibilidade (idDisponibilidade, cnpj);
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroUser`(
+    IN p_email VARCHAR(50),
+    IN p_senha VARCHAR(30),
+    OUT p_retorno INT UNSIGNED
+)
+BEGIN
+    IF (SELECT COUNT(*) FROM tblUsuario WHERE email = p_email) = 0 THEN
+        INSERT INTO tblUsuario (email, senha) VALUES (p_email, p_senha);
+        SET p_retorno = (SELECT idUsuario FROM tblUsuario WHERE email = p_email);
+    ELSE
+        SET p_retorno = 0;
+    END IF;
+END$$
+DELIMITER;
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroPac`(
+    IN p_idUsuario INT,
+    IN p_cpf CHAR(14),
+    IN p_nome VARCHAR(50),
+    IN p_sexo CHAR(1),
+    IN p_dataNasc DATE,
+    IN p_fone CHAR(15)
+)
+BEGIN
+
+    INSERT INTO tblPaciente (
+        idUsuario, 
+        cpfPaciente, 
+        nomePaciente, 
+        sexoPaciente, 
+        dataNascPaciente, 
+        fonePaciente
+    ) VALUES (
+        p_idUsuario, 
+        p_cpf, 
+        p_nome, 
+        p_sexo, 
+        p_dataNasc, 
+        p_fone
+    );
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_loginPac`(
+    IN p_email VARCHAR(50),
+    IN p_senha VARCHAR(30),
+    OUT p_retorno INT
+)
+BEGIN
+    IF (SELECT COUNT(*) 
+        FROM tblUsuario 
+        WHERE email = p_email 
+          AND idUsuario IN (SELECT idUsuario FROM tblPaciente)) > 0 THEN
+        SET p_retorno = (SELECT idUsuario 
+                         FROM tblUsuario 
+                         WHERE email = p_email);
+    ELSE
+        SET p_retorno = 0;
+    END IF;
+END$$
+DELIMITER ;
