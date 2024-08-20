@@ -174,3 +174,52 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_excluirPac`(
+    IN p_id INT
+)
+BEGIN
+    DELETE FROM tblPaciente WHERE idUsuario = p_id;
+    DELETE FROM tblUsuario WHERE idUsuario = p_id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
+    IN p_id INT,
+    IN p_nome VARCHAR(50),
+    IN p_email VARCHAR(50),
+    IN p_date DATE,
+    IN p_sexo CHAR(1),
+    IN p_tel CHAR(15),
+    IN p_cpf CHAR(14)
+)
+BEGIN
+    UPDATE tblUsuario SET email = p_email
+    WHERE idUsuario = p_id;
+    UPDATE tblPaciente SET dataNascPaciente = p_date, sexoPaciente = p_sexo, fonePaciente = p_tel, cpfPaciente = p_cpf
+    WHERE idUsuario = p_id;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_baseLoad`(
+    IN p_id INT,
+    OUT p_nome VARCHAR(50),
+    OUT p_email VARCHAR(50),
+    OUT p_data DATE,
+    OUT p_sexo CHAR(1),
+    OUT p_tel CHAR(15),
+    OUT p_cpf CHAR(14)
+)
+BEGIN
+    SET p_nome = SELECT nomePaciente FROM tblPaciente WHERE idUsuario = p_id;
+    SET p_email = SELECT email FROM tblUsuario WHERE idUsuario = p_id;
+    SET p_data = SELECT dataNascPaciente FROM tblPaciente WHERE idUsuario = p_id;
+    SET p_sexo = SELECT sexoPaciente FROM tblPaciente WHERE idUsuario = p_id;
+    SET p_tel = SELECT fonePaciente FROM tblPaciente WHERE idUsuario = p_id;
+    SET p_cpf = SELECT cpfPaciente FROM tblPaciente WHERE idUsuario = p_id;
+END$$
+DELIMITER ;
