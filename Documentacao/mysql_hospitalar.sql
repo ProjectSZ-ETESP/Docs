@@ -23,7 +23,7 @@ idPaciente int PRIMARY KEY AUTO_INCREMENT,
 idUsuario int,
 cpfPaciente char(11) NOT NULL,
 nomePaciente varchar(50) NOT NULL,
-sexoPaciente char(1) NOT NULL,
+sexoPaciente char(9) NOT NULL,
 dataNascPaciente date NOT NULL,
 fonePaciente char(11),
 fotoPaciente varbinary(8000),
@@ -38,7 +38,7 @@ cpfFuncionario char(11) PRIMARY KEY,
 idUsuario int,
 cnpj char(14),
 nomeFuncionario varchar(50) NOT NULL,
-sexoFuncionario char(1) NOT NULL,
+sexoFuncionario char(9) NOT NULL,
 foneFuncionario char(11),
 fotoFuncionario varbinary(8000),
 
@@ -55,7 +55,7 @@ cnpj char(14),
 nomeMedico varchar(50) NOT NULL,
 tipoMedico varchar(50) NOT NULL,
 emailMedico varchar(50) NOT NULL,
-sexoMedico char(1) NOT NULL,
+sexoMedico char(9) NOT NULL,
 dataNascMedico date NOT NULL,
 foneMedico char(11),
 
@@ -129,7 +129,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroPac`(
     IN p_idUsuario INT,
     IN p_cpf CHAR(14),
     IN p_nome VARCHAR(50),
-    IN p_sexo CHAR(1),
+    IN p_sexo CHAR(9),
     IN p_dataNasc DATE,
     IN p_fone CHAR(15)
 )
@@ -191,7 +191,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
     IN p_nome VARCHAR(50),
     IN p_email VARCHAR(50),
     IN p_date DATE,
-    IN p_sexo CHAR(1),
+    IN p_sexo CHAR(9),
     IN p_tel CHAR(15),
     IN p_cpf CHAR(14)
 )
@@ -211,7 +211,7 @@ CREATE PROCEDURE `proc_baseLoad`(
     OUT p_nome VARCHAR(50),
     OUT p_email VARCHAR(50),
     OUT p_data DATE,
-    OUT p_sexo CHAR(1),
+    OUT p_sexo CHAR(9),
     OUT p_tel CHAR(15),
     OUT p_cpf CHAR(14)
 )
