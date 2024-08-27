@@ -227,11 +227,11 @@ BEGIN
     
     SELECT dataNascPaciente INTO p_data
     FROM tblPaciente
-    WHERE idUsuario = p_id
+    WHERE idUsuario = p_id;
     
     SELECT sexoPaciente INTO p_sexo
     FROM tblPaciente
-    WHERE idUsuario = p_id
+    WHERE idUsuario = p_id;
     
     SELECT fonePaciente INTO p_tel
     FROM tblPaciente
