@@ -127,11 +127,11 @@ DELIMITER ;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroPac`(
     IN p_idUsuario INT,
-    IN p_cpf CHAR(14),
+    IN p_cpf CHAR(11),
     IN p_nome VARCHAR(50),
     IN p_sexo CHAR(9),
     IN p_dataNasc DATE,
-    IN p_fone CHAR(15)
+    IN p_fone CHAR(11)
 )
 BEGIN
 
@@ -192,8 +192,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
     IN p_email VARCHAR(50),
     IN p_date DATE,
     IN p_sexo CHAR(9),
-    IN p_tel CHAR(15),
-    IN p_cpf CHAR(14)
+    IN p_tel CHAR(11),
+    IN p_cpf CHAR(11)
 )
 BEGIN
     UPDATE tblUsuario SET email = p_email
@@ -212,8 +212,8 @@ CREATE PROCEDURE `proc_baseLoad`(
     OUT p_email VARCHAR(50),
     OUT p_data DATE,
     OUT p_sexo CHAR(9),
-    OUT p_tel CHAR(15),
-    OUT p_cpf CHAR(14)
+    OUT p_tel CHAR(11),
+    OUT p_cpf CHAR(11)
 )
 BEGIN
     
