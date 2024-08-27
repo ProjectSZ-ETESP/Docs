@@ -205,7 +205,8 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_baseLoad`(
+
+CREATE PROCEDURE `proc_baseLoad`(
     IN p_id INT,
     OUT p_nome VARCHAR(50),
     OUT p_email VARCHAR(50),
@@ -215,11 +216,30 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_baseLoad`(
     OUT p_cpf CHAR(14)
 )
 BEGIN
-    SET p_nome = SELECT nomePaciente FROM tblPaciente WHERE idUsuario = p_id;
-    SET p_email = SELECT email FROM tblUsuario WHERE idUsuario = p_id;
-    SET p_data = SELECT dataNascPaciente FROM tblPaciente WHERE idUsuario = p_id;
-    SET p_sexo = SELECT sexoPaciente FROM tblPaciente WHERE idUsuario = p_id;
-    SET p_tel = SELECT fonePaciente FROM tblPaciente WHERE idUsuario = p_id;
-    SET p_cpf = SELECT cpfPaciente FROM tblPaciente WHERE idUsuario = p_id;
+    
+    SELECT nomePaciente INTO p_nome
+    FROM tblPaciente
+    WHERE idUsuario = p_id;
+    
+    SELECT email INTO p_email
+    FROM tblUsuario
+    WHERE idUsuario = p_id;
+    
+    SELECT dataNascPaciente INTO p_data
+    FROM tblPaciente
+    WHERE idUsuario = p_id
+    
+    SELECT sexoPaciente INTO p_sexo
+    FROM tblPaciente
+    WHERE idUsuario = p_id
+    
+    SELECT fonePaciente INTO p_tel
+    FROM tblPaciente
+    WHERE idUsuario = p_id;
+    
+    SELECT cpfPaciente INTO p_cpf
+    FROM tblPaciente
+    WHERE idUsuario = p_id;
 END$$
+
 DELIMITER ;
