@@ -198,7 +198,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
 BEGIN
     UPDATE tblUsuario SET email = p_email
     WHERE idUsuario = p_id;
-    UPDATE tblPaciente SET dataNascPaciente = p_date, sexoPaciente = p_sexo, fonePaciente = p_tel, cpfPaciente = p_cpf
+    UPDATE tblPaciente SET nomePaciente = p_nome, dataNascPaciente = p_date, sexoPaciente = p_sexo, fonePaciente = p_tel, cpfPaciente = p_cpf
     WHERE idUsuario = p_id;
 
 END$$
