@@ -90,8 +90,9 @@ idUsuario int,
 cnpj char(14),
 idConsulta int,
 tipoNotificacao varchar(20) NOT NULL,
-dataCriacao date,
-horaCriacao time,
+textoNotificacao varchar(50) NOT NULL,
+dataCriacao date NOT NULL,
+horaCriacao time NOT NULL,
 lida bit,
 
 CONSTRAINT fk_UsuarioNotificacao FOREIGN KEY (idUsuario)
