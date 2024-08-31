@@ -23,8 +23,10 @@ idPaciente int PRIMARY KEY AUTO_INCREMENT,
 idUsuario int,
 cpfPaciente char(11) NOT NULL,
 nomePaciente varchar(50) NOT NULL,
-sexoPaciente char(9) NOT NULL,
+sexoPaciente char(1) NOT NULL,
 dataNascPaciente date NOT NULL,
+tipoSanguineo varchar(3),
+condicoesMedicas varchar(30),
 fonePaciente char(11),
 fotoPaciente varbinary(8000),
 
@@ -38,7 +40,7 @@ cpfFuncionario char(11) PRIMARY KEY,
 idUsuario int,
 cnpj char(14),
 nomeFuncionario varchar(50) NOT NULL,
-sexoFuncionario char(9) NOT NULL,
+sexoFuncionario char(1) NOT NULL,
 foneFuncionario char(11),
 fotoFuncionario varbinary(8000),
 
@@ -55,7 +57,7 @@ cnpj char(14),
 nomeMedico varchar(50) NOT NULL,
 tipoMedico varchar(50) NOT NULL,
 emailMedico varchar(50) NOT NULL,
-sexoMedico char(9) NOT NULL,
+sexoMedico char(1) NOT NULL,
 dataNascMedico date NOT NULL,
 foneMedico char(11),
 
@@ -81,6 +83,25 @@ CONSTRAINT fk_idPacienteConsulta FOREIGN KEY (idPaciente)
 	REFERENCES tblPaciente (idPaciente)
 );
 CREATE INDEX xConsulta ON tblConsulta (idConsulta, cnpj, crm, idPaciente);
+
+CREATE TABLE tblNotificacao (
+idNotificacao int PRIMARY KEY AUTO_INCREMENT,
+idUsuario int,
+cnpj char(14),
+idConsulta int,
+tipoNotificacao varchar(20) NOT NULL,
+dataCriacao date,
+horaCriacao time,
+lida bit,
+
+CONSTRAINT fk_UsuarioNotificacao FOREIGN KEY (idUsuario)
+    REFERENCES tblUsuario (idUsuario),
+CONSTRAINT fk_HospitalNotificacao FOREIGN KEY (cnpj)
+    REFERENCES tblHospital (cnpj),
+CONSTRAINT fk_ConsultaNotificacao FOREIGN KEY (idConsulta)
+    REFERENCES tblConsulta (idConsulta)
+);
+CREATE INDEX xNotificacao ON tblNotificacao (idNotificacao, idUsuario, cnpj, idConsulta);
 
 CREATE TABLE tblProntuario (
 idProntuario int PRIMARY KEY AUTO_INCREMENT,
@@ -120,18 +141,18 @@ BEGIN
         SET p_retorno = 0;
     END IF;
 END$$
-DELIMITER ;
+DELIMITER;
 
 
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroPac`(
     IN p_idUsuario INT,
-    IN p_cpf CHAR(11),
+    IN p_cpf CHAR(14),
     IN p_nome VARCHAR(50),
-    IN p_sexo CHAR(9),
+    IN p_sexo CHAR(1),
     IN p_dataNasc DATE,
-    IN p_fone CHAR(11)
+    IN p_fone CHAR(15)
 )
 BEGIN
 
@@ -191,32 +212,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
     IN p_nome VARCHAR(50),
     IN p_email VARCHAR(50),
     IN p_date DATE,
-    IN p_sexo CHAR(9),
-    IN p_tel CHAR(11),
-    IN p_cpf CHAR(11)
+    IN p_sexo CHAR(1),
+    IN p_tel CHAR(15),
+    IN p_cpf CHAR(14)
 )
 BEGIN
     UPDATE tblUsuario SET email = p_email
     WHERE idUsuario = p_id;
     UPDATE tblPaciente SET nomePaciente = p_nome, dataNascPaciente = p_date, sexoPaciente = p_sexo, fonePaciente = p_tel, cpfPaciente = p_cpf
     WHERE idUsuario = p_id;
-
 END$$
 DELIMITER ;
 
 DELIMITER $$
-
-CREATE PROCEDURE `proc_baseLoad`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_baseLoad`(
     IN p_id INT,
     OUT p_nome VARCHAR(50),
     OUT p_email VARCHAR(50),
     OUT p_data DATE,
-    OUT p_sexo CHAR(9),
-    OUT p_tel CHAR(11),
-    OUT p_cpf CHAR(11)
+    OUT p_sexo CHAR(1),
+    OUT p_tel CHAR(15),
+    OUT p_cpf CHAR(14)
 )
 BEGIN
-    
     SELECT nomePaciente INTO p_nome
     FROM tblPaciente
     WHERE idUsuario = p_id;
@@ -241,5 +259,4 @@ BEGIN
     FROM tblPaciente
     WHERE idUsuario = p_id;
 END$$
-
 DELIMITER ;
