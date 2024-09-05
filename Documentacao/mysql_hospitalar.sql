@@ -107,6 +107,7 @@ CREATE INDEX xNotificacao ON tblNotificacao (idNotificacao, idUsuario, cnpj, idC
 CREATE TABLE tblProntuario (
 idProntuario int PRIMARY KEY AUTO_INCREMENT,
 idConsulta int,
+tipoConsulta varchar(50) NOT NULL,
 descricao varchar(200) NOT NULL,
 receituario varchar(100) NOT NULL,
 
@@ -261,3 +262,20 @@ BEGIN
     WHERE idUsuario = p_id;
 END$$
 DELIMITER ;
+
+/*
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_consultaLoad`(
+    IN p_id INT,
+    OUT p_count INT,
+    OUT p_data DATE,
+    OUT p_hora TIME,
+    OUT p_clinica VARCHAR(50),
+    OUT p_doutor VARCHAR(50),
+    OUT p_tipoConsulta VARCHAR(50)
+)
+BEGIN
+
+END$$
+DELIMITER ;
+*/
