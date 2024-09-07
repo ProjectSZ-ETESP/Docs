@@ -119,7 +119,7 @@ CREATE INDEX xProntuario ON tblProntuario (idProntuario, idConsulta);
 CREATE TABLE tblDisponibilidade (
 idDisponibilidade int PRIMARY KEY AUTO_INCREMENT,
 cnpj char(14),
-dataDisponivel date,
+dataIndisponivel date,
 descricao varchar(100) NOT NULL,
 
 CONSTRAINT fk_HospitalDisponibilidade FOREIGN KEY (cnpj)
