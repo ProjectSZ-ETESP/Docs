@@ -263,11 +263,10 @@ BEGIN
 END$$
 DELIMITER ;
 
-/*
+
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_consultaLoad`(
     IN p_id INT,
-    OUT p_count INT,
     OUT p_data DATE,
     OUT p_hora TIME,
     OUT p_clinica VARCHAR(50),
@@ -275,7 +274,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_consultaLoad`(
     OUT p_tipoConsulta VARCHAR(50)
 )
 BEGIN
+    SELECT dataConsulta INTO p_data
+    FROM tblConsulta
+    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+    
+    SELECT horaConsulta INTO p_hora
+    FROM tblConsulta
+    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
 
+    SELECT cnpj INTO p_clinica
+    FROM tblConsulta
+    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+
+    SELECT crm INTO p_doutor
+    FROM tblConsulta
+    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+
+    SELECT tipoConsulta INTO p_tipoConsulta
+    FROM tblConsulta
+    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
 END$$
 DELIMITER ;
-*/
