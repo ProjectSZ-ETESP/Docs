@@ -71,9 +71,9 @@ idConsulta int PRIMARY KEY AUTO_INCREMENT,
 cnpj char(14),
 crm char(6),
 idPaciente int,
+tipoConsulta varchar(50) NOT NULL,
 dataConsulta date NOT NULL,
 horaConsulta time NOT NULL,
-preConsulta varchar(256),
 
 CONSTRAINT fk_HospitalConsulta FOREIGN KEY (cnpj)
 	REFERENCES tblHospital (cnpj),
