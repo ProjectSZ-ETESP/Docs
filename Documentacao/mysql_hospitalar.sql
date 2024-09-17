@@ -143,7 +143,7 @@ BEGIN
         SET p_retorno = 0;
     END IF;
 END$$
-DELIMITER;
+DELIMITER ;
 
 
 
