@@ -179,6 +179,37 @@ DELIMITER ;
 
 
 DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroFunc`(
+    IN p_cpf CHAR(14),
+    IN p_idUsuario INT,
+    IN p_cnpj VARCHAR(14),
+    IN p_nome VARCHAR(50),
+    IN p_sexo CHAR(1),
+    IN p_fone CHAR(15)
+)
+BEGIN
+
+    INSERT INTO tblFuncionario (
+        cpfFuncionario, 
+        idUsuario, 
+        cnpj, 
+        nomeFuncionario, 
+        sexoFuncionario, 
+        foneFuncionario
+    ) VALUES (
+        p_cpf, 
+        p_idUsuario, 
+        p_cnpj, 
+        p_nome, 
+        p_sexo, 
+        p_fone
+    );
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_loginPac`(
     IN p_email VARCHAR(50),
     IN p_senha VARCHAR(30),
