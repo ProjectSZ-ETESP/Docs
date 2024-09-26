@@ -229,6 +229,29 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_loginFunc`(
+    IN p_email VARCHAR(50),
+    IN p_senha VARCHAR(30),
+    OUT p_retorno INT
+)
+BEGIN
+    IF (SELECT COUNT(*) 
+        FROM tblUsuario 
+        WHERE email = p_email 
+          AND idUsuario IN (SELECT idUsuario FROM tblFuncionario)) > 0 THEN
+        SET p_retorno = (SELECT idUsuario 
+                         FROM tblUsuario 
+                         WHERE email = p_email);
+    ELSE
+        SET p_retorno = 0;
+    END IF;
+END$$
+DELIMITER ;
+
+
+
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_excluirPac`(
     IN p_id INT
@@ -239,8 +262,42 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_excluirFunc`(
+    IN p_id INT
+)
+BEGIN
+    DELETE FROM tblFuncionario WHERE idUsuario = p_id;
+    DELETE FROM tblUsuario WHERE idUsuario = p_id;
+END$$
+DELIMITER ;
+
+
+
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
+    IN p_id INT,
+    IN p_nome VARCHAR(50),
+    IN p_email VARCHAR(50),
+    IN p_cpf CHAR(14),
+    IN p_cnpj VARCHAR(14),
+    IN p_sexo CHAR(1),
+    IN p_fone CHAR(15)
+)
+BEGIN
+    UPDATE tblUsuario SET email = p_email
+    WHERE idUsuario = p_id;
+    UPDATE tblFuncionario SET nomeFuncionario = p_nome, cpfFuncionario = p_cpf, cnpj = p_cnpj, sexoFuncionario = p_sexo, foneFuncionario = p_fone
+    WHERE idUsuario = p_id;
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editFunc`(
     IN p_id INT,
     IN p_nome VARCHAR(50),
     IN p_email VARCHAR(50),
@@ -256,6 +313,8 @@ BEGIN
     WHERE idUsuario = p_id;
 END$$
 DELIMITER ;
+
+
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_baseLoad`(
@@ -293,6 +352,7 @@ BEGIN
     WHERE idUsuario = p_id;
 END$$
 DELIMITER ;
+
 
 
 DELIMITER $$
