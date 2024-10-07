@@ -28,7 +28,7 @@ dataNascPaciente date NOT NULL,
 tipoSanguineo varchar(3),
 condicoesMedicas varchar(30),
 fonePaciente char(11),
-fotoPaciente varbinary(8000),
+fotoPaciente char(1),
 
 CONSTRAINT fk_PacienteUsuario FOREIGN KEY (idUsuario)
 	REFERENCES tblUsuario (idUsuario)
@@ -42,7 +42,7 @@ cnpj char(14),
 nomeFuncionario varchar(50) NOT NULL,
 sexoFuncionario char(1) NOT NULL,
 foneFuncionario char(11),
-fotoFuncionario varbinary(8000),
+fotoFuncionario char(1),
 
 CONSTRAINT fk_FuncionarioUsuario FOREIGN KEY (idUsuario)
 	REFERENCES tblUsuario (idUsuario),
@@ -277,7 +277,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editFunc`(
     IN p_id INT,
     IN p_nome VARCHAR(50),
     IN p_email VARCHAR(50),
@@ -297,7 +297,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editFunc`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
     IN p_id INT,
     IN p_nome VARCHAR(50),
     IN p_email VARCHAR(50),
