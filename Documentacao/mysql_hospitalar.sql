@@ -1,4 +1,3 @@
-
 CREATE TABLE tblUsuario (
 idUsuario int PRIMARY KEY AUTO_INCREMENT,
 email varchar(50) NOT NULL,
@@ -26,7 +25,7 @@ nomePaciente varchar(50) NOT NULL,
 sexoPaciente char(1) NOT NULL,
 dataNascPaciente date NOT NULL,
 tipoSanguineo varchar(3),
-condicoesMedicas varchar(30),
+condicoesMedicas varchar(50),
 fonePaciente char(11),
 fotoPaciente char(1),
 
@@ -87,9 +86,8 @@ CREATE INDEX xConsulta ON tblConsulta (idConsulta, cnpj, crm, idPaciente);
 CREATE TABLE tblNotificacao (
 idNotificacao int PRIMARY KEY AUTO_INCREMENT,
 idUsuario int,
-cnpj char(14),
 idConsulta int,
-tipoNotificacao varchar(20) NOT NULL,
+tipoNotificacao varchar(50) NOT NULL,
 textoNotificacao varchar(50) NOT NULL,
 dataCriacao date NOT NULL,
 horaCriacao time NOT NULL,
@@ -97,12 +95,10 @@ lida bit,
 
 CONSTRAINT fk_UsuarioNotificacao FOREIGN KEY (idUsuario)
     REFERENCES tblUsuario (idUsuario),
-CONSTRAINT fk_HospitalNotificacao FOREIGN KEY (cnpj)
-    REFERENCES tblHospital (cnpj),
 CONSTRAINT fk_ConsultaNotificacao FOREIGN KEY (idConsulta)
     REFERENCES tblConsulta (idConsulta)
 );
-CREATE INDEX xNotificacao ON tblNotificacao (idNotificacao, idUsuario, cnpj, idConsulta);
+CREATE INDEX xNotificacao ON tblNotificacao (idNotificacao, idUsuario, idConsulta);
 
 CREATE TABLE tblProntuario (
 idProntuario int PRIMARY KEY AUTO_INCREMENT,
@@ -127,7 +123,124 @@ CONSTRAINT fk_HospitalDisponibilidade FOREIGN KEY (cnpj)
 );
 CREATE INDEX xDisponibilidade ON tblDisponibilidade (idDisponibilidade, cnpj);
 
+INSERT INTO tblUsuario (email, senha) VALUES
+    ('primeiro@gmail.com', '1'),
+    ('segundo@gmail.com', '2'),
+    ('terceiro@gmail.com', '3'),
+    ('quarto@gmail.com', '4'),
+    ('quinto@gmail.com', '5'),
+    ('sexto@gmail.com', '6'),
+    ('setimo@gmail.com', '7'),
+    ('oitavo@gmail.com', '8'),
+    ('nono@gmail.com', '9'),
+    ('decimo@gmail.com', '10'),
+    ('decimoprimeiro@gmail.com', '11'),
+    ('decimosegundo@gmail.com', '12'),
+    ('decimoterceiro@gmail.com', '13'),
+    ('decimoquarto@gmail.com', '14'),
+    ('decimoquinto@gmail.com', '15'),
+    ('decimosexto@gmail.com', '16'),
+    ('decimosetimo@gmail.com', '17'),
+    ('decimooitavo@gmail.com', '18'),
+    ('decimonono@gmail.com', '19'),
+    ('vigesimo@gmail.com', '20');
 
+INSERT INTO tblHospital VALUES
+    ('11111111111111', 'Hospital Um', 'João Primeiro', 'Uma clínica de primeira', 'uno@gmail.com', 'Rua Primária, 1', 'segunda à sexta: 06:00-22:00', '11111111111'),
+    ('22222222222222', 'Hospital Dois', 'João Segundo', 'Uma clínica de segunda', 'dos@gmail.com', 'Rua Secundária, 2', 'segunda à sexta: 06:00-22:00', '22222222222'),
+    ('33333333333333', 'Hospital Três', 'João Terceiro', 'Uma clínica de terceira', 'tres@gmail.com', 'Rua Terciária, 3', 'segunda à sexta: 06:00-22:00', '33333333333'),
+    ('44444444444444', 'Hospital Quatro', 'João Quarto', 'Uma clínica de quarta', 'quatro@gmail.com', 'Rua Quartenária, 4', 'segunda à sexta: 06:00-22:00', '44444444444'),
+    ('55555555555555', 'Hospital Cinco', 'João Quinto', 'Uma clínica de quinta', 'cinque@gmail.com', 'Rua Quintenária, 5', 'segunda à sexta: 06:00-22:00', '55555555555'),
+    ('66666666666666', 'Hospital Seis', 'João Sexto', 'Uma clínica de sexta', 'ses@gmail.com', 'Rua Senáris, 6', 'segunda à sexta: 06:00-22:00', '66666666666'),
+    ('77777777777777', 'Hospital Sete', 'João Sétimo', 'Uma clínica de sétima', 'sete@gmail.com', 'Rua Setenário, 7', 'segunda à sexta: 06:00-22:00', '77777777777'),
+    ('88888888888888', 'Hospital Oito', 'João Oitavo', 'Uma clínica de oitava', 'otcho@gmail.com', 'Rua Oitenária, 8', 'segunda à sexta: 06:00-22:00', '88888888888'),
+    ('99999999999999', 'Hospital Nove', 'João Nono', 'Uma clínica de nona', 'nove@gmail.com', 'Rua Nomenárie, 9', 'segunda à sexta: 06:00-22:00', '99999999999'),
+    ('10101010101010', 'Hospital Dez', 'João Décimo', 'Uma clínica de décima', 'dez@gmail.com', 'Rua Decenário, 10', 'segunda à sexta: 06:00-22:00', '10101010101');
+
+INSERT INTO tblPaciente (idUsuario, cpfPaciente, nomePaciente, sexoPaciente, dataNascPaciente, tipoSanguineo, condicoesMedicas, fonePaciente, fotoPaciente) VALUES
+    (1, '11111111111', 'Pacio Primeiro I', 'm', '2000-01-01', 'A+', 'virose', '11111111110', '1'),
+    (2, '22222222222', 'Pacia Segunda II', 'f', '2000-01-01', 'B+', 'TDAH', '22222222220', '2'),
+    (3, '33333333333', 'Pacio Terceiro III', 'm', '2000-01-01', 'AB', 'hemorragia interna pulmonar', '33333333330', '1'),
+    (4, '44444444444', 'Pacia Quarta IV', 'f', '2000-01-01', 'A-', 'punturas na região do estômago', '44444444440', '3'),
+    (5, '55555555555', 'Pacie Quinto V', 'm', '2000-01-01', 'A', 'fratura da clavícula', '55555555550', '4'),
+    (6, '66666666666', 'Pacio Sexto VI', 'm', '2000-01-01', 'B', 'autismo', '66666666660', '1'),
+    (7, '77777777777', 'Pacio Sétimo VII', 'm', '2000-01-01', 'A-', 'tumor no cérebro', '77777777770', '2'),
+    (8, '88888888888', 'Pacia Oitava VIII', 'f', '2000-01-01', 'A+', 'dengue', '88888888880', '2'),
+    (9, '99999999999', 'Pacia Nona IX', 'f', '2000-01-01', 'B+', 'amnésia leve', '99999999990', '1'),
+    (10, '10101010101', 'Pacio Décimo X', 'm', '2000-01-01', 'O-', 'resfriado forte', '10101010100', '3');
+
+INSERT INTO tblFuncionario VALUES
+    ('01111111111', 11, '11111111111111', 'Carlos', 'm', '01111111111', '1'),
+    ('02222222222', 12, '22222222222222', 'Bea', 'f', '02222222222', '2'),
+    ('03333333333', 13, '33333333333333', 'Gabriel', 'm', '03333333333', '3'),
+    ('04444444444', 14, '44444444444444', 'Felipe', 'm', '04444444444', '1'),
+    ('05555555555', 15, '55555555555555', 'Sara', 'f', '05555555555', '2'),
+    ('06666666666', 16, '66666666666666', 'Malcon', 'm', '06666666666', '2'),
+    ('07777777777', 17, '77777777777777', 'Rafa', 'm', '07777777777', '3'),
+    ('08888888888', 18, '88888888888888', 'Samuela', 'f', '08888888888', '3'),
+    ('09999999999', 19, '99999999999999', 'Joana', 'f', '09999999999', '1'),
+    ('01010101010', 20, '10101010101010', 'Mercuria', 'f', '01010101010', '1');
+
+INSERT INTO tblMedico VALUES
+    ('111111', '11111111111111', 'Roberto', 'Psicólogo', 'rob@gmail.com', 'm', '2000-01-01', '01111111110'),
+    ('222222', '22222222222222', 'Gabriela', 'Neurocirurgião', 'gab@gmail.com', 'f', '2000-01-01', '02222222220'),
+    ('333333', '33333333333333', 'Felix', 'Pediatra', 'fel@gmail.com', 'm', '2000-01-01', '03333333330'),
+    ('444444', '44444444444444', 'Santos', 'Cirurgião', 'santos@gmail.com', 'f', '2000-01-01', '04444444440'),
+    ('555555', '55555555555555', 'Britto', 'Médico geral', 'brito@gmail.com', 'm', '2000-01-01', '05555555550'),
+    ('666666', '66666666666666', 'Peter', 'Psicólogo', 'pete@gmail.com', 'm', '2000-01-01', '06666666660'),
+    ('777777', '77777777777777', 'Capaldi', 'Cirurgião', 'cap@gmail.com', 'f', '2000-01-01', '07777777770'),
+    ('888888', '88888888888888', 'Paola', 'Neurocirurgião', 'paola@gmail.com', 'f', '2000-01-01', '08888888880'),
+    ('999999', '99999999999999', 'Beatrice', 'Enfermeiro', 'beat@gmail.com', 'f', '2000-01-01', '09999999990'),
+    ('101010', '10101010101010', 'Diego', 'Obstetra', 'diggo@gmail.com', 'm', '2000-01-01', '01010101019');
+
+INSERT INTO tblConsulta (cnpj, crm, idPaciente, tipoConsulta, dataConsulta, horaConsulta) VALUES
+    ('11111111111111', '111111', 1, 'consulta psicológica', '2005-01-01', '01:20:59'),
+    ('22222222222222', '222222', 2, 'cirurgia de remoção do lóbulo frontal', '2005-02-28', '23:59:59'),
+    ('33333333333333', '333333', 3, 'teste do pezinho', '2005-01-01', '01:20:59'),
+    ('44444444444444', '444444', 4, 'cirurgia cardíaca', '2005-01-01', '01:20:59'),
+    ('55555555555555', '555555', 5, 'triagem', '2005-01-01', '01:20:59'),
+    ('66666666666666', '666666', 6, 'consulta psicológica', '2005-01-01', '01:20:59'),
+    ('77777777777777', '777777', 7, 'cirurgia de remoção do apêndice', '2005-01-01', '01:20:59'),
+    ('88888888888888', '888888', 8, 'exame cerebral', '2005-01-01', '01:20:59'),
+    ('99999999999999', '999999', 9, 'exame de sangue', '2005-01-01', '01:20:59'),
+    ('10101010101010', '101010', 10, 'parto', '2005-01-01', '01:20:59');
+
+INSERT INTO tblNotificacao (idUsuario, idConsulta, tipoNotificacao, textoNotificacao, dataCriacao, horaCriacao, lida) VALUES
+    (11, 1, 'Agendamento efetuado', 'Exame psicotécnico', '2004-01-01', '23:59:59', 0),
+    (9, 2, 'Agendamento efetuado', 'Cirurgia cerebral', '2004-01-01', '23:59:59', 1),
+    (9, 2, 'Agendamento atualizado', 'Cirurgia cerebral', '2004-01-02', '23:59:59', 1),
+    (4, 3, 'Agendamento efetuado', 'Teste do pezinho', '2004-01-01', '23:59:59', 1),
+    (1, 4, 'Agendamento efetuado', 'Cirurgia cardíaca', '2004-01-01', '23:59:59', 0),
+    (1, 5, 'Agendamento efetuado', 'Triagem: exame geral', '2004-01-01', '23:59:59', 1),
+    (6, 6, 'Agendamento efetuado', 'Exame psicológico', '2004-01-01', '23:59:59', 1),
+    (4, 7, 'Agendamento efetuado', 'Cirurgia de remoção do apêndice', '2004-01-01', '23:59:59', 1),
+    (20, 8, 'Agendamento efetuado', 'Exame cerebral', '2004-01-01', '23:59:59', 0),
+    (17, 9, 'Agendamento efetuado', 'Exame de sangue', '2004-01-01', '23:59:59', 0),
+    (15, 10, 'Agendamento efetuado', 'Cirurgia de parto', '2004-01-01', '23:59:59', 1);
+
+INSERT INTO tblProntuario (idConsulta, tipoConsulta, descricao, receituario) VALUES
+    (1, 'consulta psicológica', 'blablablablablablablablablablabla', 'tome remédio A'),
+    (2, 'cirurgia de remoção do lóbulo frontal', 'blablablablablablablablablablabla', 'tome remédio B'),
+    (3, 'teste do pezinho', 'blablablablablablablablablablabla', 'tome remédio C'),
+    (4, 'cirurgia cardíaca', 'blablablablablablablablablablabla', 'tome remédio D'),
+    (5, 'triagem', 'blablablablablablablablablablabla', 'tome remédio E'),
+    (6, 'consulta psicológica', 'blablablablablablablablablablabla', 'tome remédio F'),
+    (7, 'cirurgia de remoção do apêndice', 'blablablablablablablablablablabla', 'tome remédio G'),
+    (8, 'exame cerebral', 'blablablablablablablablablablabla', 'tome remédio X'),
+    (9, 'exame de sangue', 'blablablablablablablablablablabla', 'tome remédio Y'),
+    (10, 'parto', 'blablablablablablablablablablabla', 'tome remédio Z');
+    
+INSERT INTO tblDisponibilidade (cnpj, dataIndisponivel, descricao) VALUES
+    ('11111111111111', '2005-11-25', 'ponto facultativo'),
+    ('22222222222222', '2005-11-25', 'ponto facultativo'),
+    ('33333333333333', '2005-11-25', 'ponto facultativo'),
+    ('44444444444444', '2005-11-25', 'ponto facultativo'),
+    ('55555555555555', '2005-11-25', 'ponto facultativo'),
+    ('66666666666666', '2005-11-25', 'ponto facultativo'),
+    ('77777777777777', '2005-11-25', 'ponto facultativo'),
+    ('88888888888888', '2005-11-25', 'ponto facultativo'),
+    ('99999999999999', '2005-11-25', 'ponto facultativo'),
+    ('11111111111111', '2005-09-17', 'ponto facultativo');
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_cadastroUser`(
