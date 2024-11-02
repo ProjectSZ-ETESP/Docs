@@ -83,6 +83,21 @@ CONSTRAINT fk_idPacienteConsulta FOREIGN KEY (idPaciente)
 );
 CREATE INDEX xConsulta ON tblConsulta (idConsulta, cnpj, crm, idPaciente);
 
+CREATE TABLE tblPendente (
+idPendente int PRIMARY KEY AUTO_INCREMENT,
+idPaciente int,
+cnpj char(14),
+dataPendente date,
+horaPendente time,
+descPaciente varchar(500),
+
+CONSTRAINT fk_PacientePendente FOREIGN KEY (idPaciente)
+	REFERENCES tblPaciente (idPaciente),
+CONSTRAINT fk_HospitalPendente FOREIGN KEY (cnpj)
+	REFERENCES tblHospital (cnpj)
+);
+CREATE INDEX xPendente ON tblPendente (idPendente, idPaciente, cnpj);
+
 CREATE TABLE tblNotificacao (
 idNotificacao int PRIMARY KEY AUTO_INCREMENT,
 idUsuario int,
