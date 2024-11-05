@@ -292,14 +292,16 @@ BEGIN
         nomePaciente, 
         sexoPaciente, 
         dataNascPaciente, 
-        fonePaciente
+        fonePaciente,
+	fotoPaciente
     ) VALUES (
         p_idUsuario, 
         p_cpf, 
         p_nome, 
         p_sexo, 
         p_dataNasc, 
-        p_fone
+        p_fone,
+	'1'
     );
 END$$
 DELIMITER ;
@@ -412,7 +414,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editFunc`(
     IN p_cpf CHAR(14),
     IN p_cnpj VARCHAR(14),
     IN p_sexo CHAR(1),
-    IN p_fone CHAR(15)
+    IN p_fone CHAR(15),
 )
 BEGIN
     UPDATE tblUsuario SET email = p_email
@@ -432,12 +434,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editPac`(
     IN p_date DATE,
     IN p_sexo CHAR(1),
     IN p_tel CHAR(15),
-    IN p_cpf CHAR(14)
+    IN p_cpf CHAR(14),
+    IN p_foto CHAR(1)
 )
 BEGIN
     UPDATE tblUsuario SET email = p_email
     WHERE idUsuario = p_id;
-    UPDATE tblPaciente SET nomePaciente = p_nome, dataNascPaciente = p_date, sexoPaciente = p_sexo, fonePaciente = p_tel, cpfPaciente = p_cpf
+    UPDATE tblPaciente SET nomePaciente = p_nome, dataNascPaciente = p_date, sexoPaciente = p_sexo, fonePaciente = p_tel, cpfPaciente = p_cpf, fotoPaciente = p_foto
     WHERE idUsuario = p_id;
 END$$
 DELIMITER ;
