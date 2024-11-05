@@ -349,7 +349,8 @@ BEGIN
     IF (SELECT COUNT(*) 
         FROM tblUsuario 
         WHERE email = p_email 
-          AND idUsuario IN (SELECT idUsuario FROM tblPaciente)) > 0 THEN
+	    AND senha = p_senha
+            AND idUsuario IN (SELECT idUsuario FROM tblPaciente)) > 0 THEN
         SET p_retorno = (SELECT idUsuario 
                          FROM tblUsuario 
                          WHERE email = p_email);
