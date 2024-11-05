@@ -414,7 +414,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_editFunc`(
     IN p_cpf CHAR(14),
     IN p_cnpj VARCHAR(14),
     IN p_sexo CHAR(1),
-    IN p_fone CHAR(15),
+    IN p_fone CHAR(15)
 )
 BEGIN
     UPDATE tblUsuario SET email = p_email
@@ -455,7 +455,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_baseLoad`(
     OUT p_data DATE,
     OUT p_sexo CHAR(1),
     OUT p_tel CHAR(15),
-    OUT p_cpf CHAR(14)
+    OUT p_cpf CHAR(14),
+    OUT p_foto CHAR(1)
 )
 BEGIN
     SELECT nomePaciente INTO p_nome
@@ -479,6 +480,10 @@ BEGIN
     WHERE idUsuario = p_id;
     
     SELECT cpfPaciente INTO p_cpf
+    FROM tblPaciente
+    WHERE idUsuario = p_id;
+
+    SELECT fotoPacient INTO p_foto
     FROM tblPaciente
     WHERE idUsuario = p_id;
 END$$
