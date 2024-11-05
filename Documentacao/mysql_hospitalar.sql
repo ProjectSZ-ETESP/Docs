@@ -483,7 +483,7 @@ BEGIN
     FROM tblPaciente
     WHERE idUsuario = p_id;
 
-    SELECT fotoPacient INTO p_foto
+    SELECT fotoPaciente INTO p_foto
     FROM tblPaciente
     WHERE idUsuario = p_id;
 END$$
