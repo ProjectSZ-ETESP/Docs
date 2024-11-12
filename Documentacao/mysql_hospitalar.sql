@@ -495,31 +495,31 @@ DELIMITER ;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_consultaLoad`(
     IN p_id INT,
-    OUT p_data DATE,
-    OUT p_hora TIME,
-    OUT p_clinica VARCHAR(50),
-    OUT p_doutor VARCHAR(50),
-    OUT p_tipoConsulta VARCHAR(50)
+    OUT p_data VARCHAR(1000),
+    OUT p_hora VARCHAR(1000),
+    OUT p_clinica VARCHAR(1000),
+    OUT p_doutor VARCHAR(1000),
+    OUT p_tipoConsulta VARCHAR(1000)
 )
 BEGIN
-    SELECT dataConsulta INTO p_data
+    SELECT CAST(GROUP_CONCAT(dataConsulta SEPARATOR ',') AS CHAR) INTO p_data
     FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id);
     
-    SELECT horaConsulta INTO p_hora
+    SELECT CAST(GROUP_CONCAT(horaConsulta SEPARATOR ',') AS CHAR) INTO p_hora
     FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id);
 
-    SELECT cnpj INTO p_clinica
-    FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+    SELECT GROUP_CONCAT(nomeHosp) INTO p_clinica
+    FROM tblHospital
+    WHERE cnpj IN (SELECT cnpj FROM tblConsulta WHERE idPaciente = p_id);
 
-    SELECT crm INTO p_doutor
-    FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+    SELECT GROUP_CONCAT(nomeMedico) INTO p_doutor
+    FROM tblMedico
+    WHERE crm IN (SELECT crm FROM tblConsulta WHERE idPaciente = p_id);
 
-    SELECT tipoConsulta INTO p_tipoConsulta
+    SELECT GROUP_CONCAT(tipoConsulta) INTO p_tipoConsulta
     FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblUsuario WHERE idUsuario = p_id);
+    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id);
 END$$
 DELIMITER ;
