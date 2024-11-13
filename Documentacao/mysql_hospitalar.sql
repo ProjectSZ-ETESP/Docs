@@ -499,27 +499,38 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `proc_consultaLoad`(
     OUT p_hora VARCHAR(1000),
     OUT p_clinica VARCHAR(1000),
     OUT p_doutor VARCHAR(1000),
-    OUT p_tipoConsulta VARCHAR(1000)
+    OUT p_tipoConsulta VARCHAR(1000),
+    OUT p_descricao VARCHAR(10000)
 )
 BEGIN
+
     SELECT CAST(GROUP_CONCAT(dataConsulta SEPARATOR ',') AS CHAR) INTO p_data
     FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id);
+    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id) AND
+    idConsulta IN (SELECT idConsulta FROM tblProntuario);
     
     SELECT CAST(GROUP_CONCAT(horaConsulta SEPARATOR ',') AS CHAR) INTO p_hora
     FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id);
+    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id) AND
+    idConsulta IN (SELECT idConsulta FROM tblProntuario);
 
     SELECT GROUP_CONCAT(nomeHosp) INTO p_clinica
     FROM tblHospital
-    WHERE cnpj IN (SELECT cnpj FROM tblConsulta WHERE idPaciente = p_id);
+    WHERE cnpj IN (SELECT cnpj FROM tblConsulta WHERE idPaciente = p_id AND
+    idConsulta IN (SELECT idConsulta FROM tblProntuario));
 
     SELECT GROUP_CONCAT(nomeMedico) INTO p_doutor
     FROM tblMedico
-    WHERE crm IN (SELECT crm FROM tblConsulta WHERE idPaciente = p_id);
+    WHERE crm IN (SELECT crm FROM tblConsulta WHERE idPaciente = p_id AND
+    idConsulta IN (SELECT idConsulta FROM tblProntuario));
 
     SELECT GROUP_CONCAT(tipoConsulta) INTO p_tipoConsulta
     FROM tblConsulta
-    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id);
+    WHERE idPaciente IN (SELECT idPaciente FROM tblPaciente WHERE idPaciente = p_id) AND
+    idConsulta IN (SELECT idConsulta FROM tblProntuario);
+
+    SELECT GROUP_CONCAT(descricao) INTO p_descricao
+    FROM tblProntuario
+    WHERE idConsulta IN (SELECT idConsulta FROM tblConsulta WHERE idPaciente = p_id);
 END$$
 DELIMITER ;
